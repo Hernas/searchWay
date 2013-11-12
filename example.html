@@ -1,0 +1,80 @@
+<!--
+/**
+ * License
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * */
+
+/**
+ * @author Hernas <kontakt@hernas.pl>
+ * @copyright 2008 Hernas.pl.
+ * @version 1.2
+ */
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+    <head>
+        <title>SearchWay</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="searchWay.js"></script>
+        <script type="text/javascript">
+            function bodyLoad() {
+                var Map = [
+                    [1,0,0,0,1,0,1,0],
+                    [1,0,1,1,1,1,0,0],
+                    [1,0,1,0,0,1,0,1],
+                    [0,0,0,0,0,0,0,1],
+                    [0,0,0,1,1,1,1,1],
+                    [0,1,0,0,0,0,0,0],
+                    [1,1,0,0,0,1,0,0],
+                    [1,1,0,1,1,1,0,0]
+                ];
+
+                var oSearchWay = new SearchWay();
+
+                var startX = 7;
+                var startY = 7;
+                var targetX = 7;
+                var targetY = 0;
+                
+                Way = oSearchWay.find(startX, startY, targetX, targetY,Map.clone());  //.clone is important for not changing orginal map
+                document.getElementById('way').innerHTML = '';
+
+                for(i in Way) {
+                    xy = Way[i];
+                    if(xy[0]!=undefined && xy[1]!=undefined ) {
+                        x = xy[0];
+                        y = xy[1];
+                        document.getElementById('way').innerHTML += (x+','+y+' -> ');
+                    }
+                }
+                document.getElementById('way').innerHTML += (targetX+','+targetY); //Target
+            }
+            // Important if we don't want to change orginal Map
+            Object.prototype.clone = function() {
+                var newObj = (this instanceof Array) ? [] : {};
+                for (i in this) {
+                    if (i == 'clone') continue;
+                    if (this[i] && typeof this[i] == "object") {
+                        newObj[i] = this[i].clone();
+                    } else newObj[i] = this[i]
+                } return newObj;
+            };
+        </script>
+    </head>
+    <body onload="bodyLoad();">
+        <div id="way"></div>
+    </body>
+</html>
